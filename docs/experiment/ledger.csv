@@ -1,0 +1,3 @@
+feature,arm,model,oracle_pass_first,oracle_total,defects_high,defects_med,defects_low,interventions,human_min,wall_min,tokens,cost_usd,caught_tester,caught_breaker,caught_e2e,caught_reviewer,verdict,notes
+F01,direct,claude-opus-5-5,14,14,1,0,0,0,,3.8,154690,,,,,,,"NUL em :id/name/buyerId dava 500; achado na revisão cega (provavelmente por causa dos testes de NUL da pipeline); corrigido em 1 rodada, 18 linhas"
+F01,pipeline,claude-opus-5-5,14,14,0,0,3,2,,36.1,951306,,1,1,0,0,SHIP,"fix1: Breaker achou NUL->500; fix2: suíte instável criada pelos testes do fix1; Coder escreveu status fora do contrato; tokens do orquestrador não contados"
