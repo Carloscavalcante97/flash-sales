@@ -1,0 +1,20 @@
+ M apps/api/prisma/schema.prisma
+ M apps/api/src/app.module.ts
+ M apps/api/vitest.config.e2e.ts
+?? apps/api/prisma/migrations/20261115155150_f01_sales_orders/migration.sql
+?? apps/api/prisma/migrations/migration_lock.toml
+?? apps/api/src/sales.controller.ts
+?? apps/api/src/sales.service.ts
+?? apps/api/test/sales.breaker.e2e-spec.ts
+?? apps/api/test/sales.e2e-spec.ts
+?? apps/api/test/sales.nul.e2e-spec.ts
+f58817e5db1b60fc6039551854ea03971f7d6542  apps/api/prisma/schema.prisma
+11c43300f896e3aeeb1ad5d846eb2f4ef8e4cc9d  apps/api/src/app.module.ts
+a264b01dab3ffb550b527601e447bde659e111c1  apps/api/vitest.config.e2e.ts
+72f0dc1bd21116c8489dc7a3a748cf7245540268  apps/api/prisma/migrations/20261115155150_f01_sales_orders/migration.sql
+7abbf1b5bc2ed90d381336ef493ef3a44c488e3d  apps/api/prisma/migrations/migration_lock.toml
+0e6cce543740d5f923b3a8991ca3507f9ac77879  apps/api/src/sales.controller.ts
+7edc26d3ba61a564fd40ccc0cbedb2cfa8557e19  apps/api/src/sales.service.ts
+7a86985728b6a32c8250596a49385d9e0d0dbcb3  apps/api/test/sales.breaker.e2e-spec.ts
+6a400b3aea5faa01d0c44fef89b381f6ca07ccb4  apps/api/test/sales.e2e-spec.ts
+dbe8200adae42c4f8b683f61df5f24bffef23167  apps/api/test/sales.nul.e2e-spec.ts
