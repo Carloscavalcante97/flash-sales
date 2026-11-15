@@ -210,3 +210,26 @@ pelo oráculo ou pela revisão cega na entrega (`done`).
 - **Leitura parcial:** depois de cada feature, o placar acumulado é publicado em
   RESULTS.md com o rótulo "parcial". Nenhuma conclusão final antes de 3
   features no A/B.
+
+## Adendo 2026-11-15 (4): F03–F07 e extras, registrado antes da F03
+
+- **Contratos.** Os contratos de F03 a F07 (`features/F03.md` a `F07.md`) foram
+  escritos pelo Claude, por delegação explícita do usuário, e congelados juntos
+  neste commit, antes de qualquer braço rodar. A F05 muda de propósito o
+  contrato de `POST /orders/:id/pay` da F03, e o arquivo diz isso.
+- **Infra congelada junto.** O RabbitMQ entra no `docker-compose.yml` agora, para
+  que os dois braços da F04 em diante partam da mesma infraestrutura.
+- **Gates humanos.** O usuário delegou ao orquestrador (a sessão principal do
+  Claude) as respostas aos gates da pipeline e às perguntas dos braços. Cada
+  resposta continua contando como intervenção no ledger, com a nota
+  "orquestrador".
+- **Execução.** Igual à da F02: braços como subagentes na mesma sessão, em
+  branches no mesmo diretório, um de cada vez, com o banco zerado entre eles.
+  Nas features ímpares o `direct` vai primeiro; nas pares, a `pipeline`. O
+  oráculo de cada feature é escrito por um subagente novo que recebe só os
+  contratos, e fica em `../flash-sales-oracle/F0X/` até os dois braços
+  entregarem.
+- **Extras fora do A/B** (só pipeline v2, com métricas internas): E1 SSE e tela
+  da fila, E2 painel admin, E3 observabilidade, E4 testes de carga com k6 e E5
+  CI. Os contratos deles são escritos depois da F07, porque dependem das rotas
+  finais.
