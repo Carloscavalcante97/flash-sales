@@ -7,3 +7,25 @@ datasource db {
   provider = "postgresql"
 }
 
+model Sale {
+  id     String  @id @default(uuid())
+  name   String
+  stock  Int     // units still available; decremented by each reservation
+  orders Order[]
+
+  @@map("sales")
+}
+
+enum OrderStatus {
+  RESERVED
+}
+
+model Order {
+  id      String      @id @default(uuid())
+  saleId  String
+  buyerId String
+  status  OrderStatus @default(RESERVED)
+  sale    Sale        @relation(fields: [saleId], references: [id])
+
+  @@map("orders")
+}
