@@ -29,3 +29,15 @@ model Order {
 
   @@map("orders")
 }
+
+// F02: one row per Idempotency-Key. status/body are written in the same
+// transaction that claims the key, so a committed row always has both.
+model IdempotencyKey {
+  key     String @id
+  saleId  String
+  buyerId String // JSON.stringify(buyerId): lossless even for lone surrogates
+  status  Int?
+  body    Json?  @db.Json // json, not jsonb: keeps the stored body byte-for-byte (key order)
+
+  @@map("idempotency_keys")
+}
