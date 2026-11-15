@@ -1,0 +1,7 @@
+stage,tokens,tool_uses,ms
+builder,88514,28,409821
+verifier,75709,27,319347
+builder-fix1,24634,20,192876
+builder-statusfix,317,2,19979
+verifier-recheck1,14444,10,131906
+committer-haiku,38568,8,63667

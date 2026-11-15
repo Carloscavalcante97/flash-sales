@@ -80,3 +80,48 @@ Protocolo e hipóteses em [PROTOCOL.md](PROTOCOL.md). Os dados brutos estão em
 Mudar a pipeline no meio do experimento altera o tratamento. Se algum ajuste for
 aplicado, ele entra como adendo datado no PROTOCOL e vale a partir da feature
 seguinte.
+
+## F02: Idempotency-Key, pipeline v2 contra direct (2026-11-15)
+
+| | direct | pipeline v2 |
+|---|---:|---:|
+| oráculo na 1ª entrega | 16/16 | 16/16 |
+| defeitos na revisão cega (alta/média/baixa) | 0/**1**/0 | 0/0/1 |
+| retrabalho até o aceite (linhas ±) | 27 | 0 |
+| rodadas de correção | 1 | 0 |
+| tokens até o aceite | 201.302 | 203.618 (+38.568 do Committer em Haiku) |
+| tempo de relógio até o aceite | 9,5 min | 17,9 min |
+| intervenções humanas no meio da run | 0 | 1 |
+| chamadas de agente | 2 | 4 (Builder, Verifier, Builder retomado, Verifier retomado) |
+| vazão com chave (exploratório) | ~1.320 req/s, p99 ~730 ms | ~1.040 req/s, p99 ~940 ms |
+
+**Defeito do direct:** um `buyerId` com surrogate UTF-16 solto fazia a repetição
+idêntica receber 422 em vez do 201 guardado. Um cliente que trata 422 gerando uma
+chave nova acabaria criando um segundo pedido. O Verifier da v2 pegou esse caso
+antes da entrega.
+
+**O que a v2 errou:** o Builder escolheu uma transação interativa com timeout de
+5 s. Isso criou um 500 sob trava longa que o direct nunca teve, porque o direct
+faz tudo numa única instrução SQL. O Verifier pegou o problema e o fix
+(`timeout: 2^31-1`) resolveu, mas o desenho da v2 terminou com cerca de 22% menos
+vazão nas compras com chave. O Builder também repetiu o deslize de status fora do
+contrato (corrigido no `builder.md` depois desta run).
+
+**Custo:** pela soma do contexto final de cada agente, a v2 gastou praticamente o
+mesmo que o direct (1,0x), contra 6,2x da v1 na F01. O tempo de relógio ainda é
+1,9x o do direct. Ressalva: nos agentes retomados, o número registrado é o
+contexto final; o custo real de processamento de cada turno fica subestimado.
+
+**Ressalva de validade:** como na F01, o revisor cego provavelmente procurou o
+surrogate no direct porque os testes de ataque da v2 apontavam para ele.
+
+## Placar parcial (regra de decisão do adendo 3)
+
+| feature | menos defeitos | tokens da pipeline ÷ direct |
+|---|---|---:|
+| F01 (v1, antes da regra) | pipeline | 6,2x |
+| F02 (v2) | pipeline | 1,0x |
+
+**Parcial: 1 de 1 feature da v2 a favor da pipeline, dentro do limite de 2,5x.**
+Pela regra registrada, ainda não há conclusão: são necessárias pelo menos 3
+features no A/B.

@@ -1,0 +1,12 @@
+ M apps/api/prisma/schema.prisma
+ M apps/api/src/sales.controller.ts
+ M apps/api/src/sales.service.ts
+?? apps/api/prisma/migrations/20261115171227_f02_idempotency_keys/migration.sql
+?? apps/api/test/sales.idempotency.breaker.e2e-spec.ts
+?? apps/api/test/sales.idempotency.e2e-spec.ts
+c27b967081ff431dd1dc1ce38579f5c69142f496  apps/api/prisma/schema.prisma
+122a54437e6d87bb5b558b21fd2343386d51e782  apps/api/src/sales.controller.ts
+b67160daeea897491a980b7f27b52dee70a7be6e  apps/api/src/sales.service.ts
+634dbc18f6392525e1a410bdf6fbc589625b3e0d  apps/api/prisma/migrations/20261115171227_f02_idempotency_keys/migration.sql
+cb0adb91a775016a5fd20cc3265066f22be7cede  apps/api/test/sales.idempotency.breaker.e2e-spec.ts
+e5a30ed4193e3556dd72c1634f1d28eeb05c3aec  apps/api/test/sales.idempotency.e2e-spec.ts
