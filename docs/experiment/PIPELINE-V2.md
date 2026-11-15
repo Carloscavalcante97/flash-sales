@@ -24,6 +24,31 @@ interface explícita, regras testáveis, escopo delimitado, nenhuma decisão em
 aberto, mudança reversível e local, e tamanho de até ~500 linhas. Se todas forem
 "sim", o próprio pedido vira o spec. O pedido da F01 passaria.
 
+## Contexto compartilhado (adotado em 2026-11-15)
+
+Cada subagente tem um contexto próprio, e no Verifier isso é intencional, porque
+garante a independência dele. Por isso não existe "ler uma vez para todos". O
+custo real é o tamanho do contexto vezes o número de turnos: no braço direct da
+F01 foram 3,07M tokens lidos do cache contra 191k escritos, em 45 turnos. A v2
+ataca isso de quatro formas:
+
+1. **Uma fonte única e curta.** O `.pipeline/spec.md` tem no máximo 80 linhas,
+   e decisões e correções entram como linhas curtas no mesmo arquivo.
+2. **Spec no início do prompt.** Ela vai no começo do prompt do Builder e do
+   Verifier. O agente começa com ela, sem chamar Read, e toda chamada abre do
+   mesmo jeito.
+3. **`## Map` no build.md.** Até 10 linhas de fatos (arquivos, comandos, como
+   subir a API, banco) para o Verifier não explorar o repo de novo.
+4. **Retomar em vez de recriar.** O fix 1 retoma o mesmo Builder e o recheck
+   retoma o mesmo Verifier, os dois via SendMessage e já com tudo no contexto. O
+   fix 2 usa um Builder novo, porque depois de 2 tentativas um contexto limpo
+   rende mais ([DDI](https://arxiv.org/abs/2506.18403)).
+
+**Não adotado:** um `CLAUDE.md` do projeto com os fatos do repo, para não mudar o
+ambiente do braço direct no meio do experimento. **Descartado:** fork para o
+Verifier, porque ele herda toda a conversa do orquestrador e perde a
+independência.
+
 ## O que mudou e por quê
 
 | mudança | o que a F01 mostrou | evidência externa |

@@ -195,3 +195,18 @@ Desvios do roteiro acima, todos aplicados igualmente aos dois braços:
 - **Oráculo da F02 em diante:** passa a incluir entradas hostis (lição da F01).
 - **Fonte de custo:** o `.pipeline/usage.csv` de cada run, gravado pelo
   orquestrador.
+
+## Adendo 2026-11-15 (3): regra de decisão, registrada antes da F02
+
+Um **defeito** é uma causa raiz distinta de severidade alta ou média, encontrada
+pelo oráculo ou pela revisão cega na entrega (`done`).
+
+- **A pipeline tem ganho real** se, entre a F02 e a F07, o braço `pipeline`
+  entregar com menos defeitos que o `direct` em pelo menos metade das features,
+  gastando no máximo 2,5 vezes os tokens do `direct` até o aceite.
+- **A pipeline é obsoleta** se a qualidade empatar (ou ela perder) na maioria das
+  features. Nesse caso o fluxo padrão do projeto passa a ser o `direct`, e o
+  passo seguinte é estudar como a indústria usa agentes hoje.
+- **Leitura parcial:** depois de cada feature, o placar acumulado é publicado em
+  RESULTS.md com o rótulo "parcial". Nenhuma conclusão final antes de 3
+  features no A/B.
