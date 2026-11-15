@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.turbo/
+.env
+coverage/
+apps/api/src/generated/
+.DS_Store
+*.tsbuildinfo
+.pipeline/
