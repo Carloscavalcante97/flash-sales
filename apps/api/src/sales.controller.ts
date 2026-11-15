@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpException, Param, Post } from '@nestjs/common';
 import { SalesService } from './sales.service.js';
 
 // ponytail: inline validation, no validation lib installed; add a schema pipe when bodies grow.
@@ -25,11 +25,21 @@ export class SalesController {
   }
 
   @Post(':id/orders')
-  order(@Param('id') id: string, @Body() body: Record<string, unknown> | undefined) {
+  async order(
+    @Param('id') id: string,
+    @Body() body: Record<string, unknown> | undefined,
+    @Headers('idempotency-key') key: string | undefined,
+  ) {
     const buyerId = body?.buyerId;
     if (typeof buyerId !== 'string' || buyerId.trim() === '' || buyerId.includes('\u0000')) {
       throw new BadRequestException('buyerId must be a non-empty string without NUL characters');
     }
-    return this.sales.reserve(id, buyerId);
+    if (key === undefined) return this.sales.reserve(id, buyerId);
+    if (!/^[\x21-\x7E]{1,255}$/.test(key)) {
+      throw new BadRequestException('Idempotency-Key must be 1 to 255 visible ASCII characters (0x21-0x7E)');
+    }
+    const saved = await this.sales.reserveOnce(id, buyerId, key);
+    if (saved.status === 201) return saved.body;
+    throw new HttpException(saved.body, saved.status); // stored 409 SOLD_OUT, replayed as-is
   }
 }
